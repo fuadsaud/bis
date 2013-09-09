@@ -22,6 +22,7 @@ describe Bis do
 
     context 'with size and value' do
       let(:value) { 10 }
+
       subject { Bis.new(size, value: value) }
 
       it 'is as big as the passed size' do
@@ -37,6 +38,7 @@ describe Bis do
   describe '#==' do
     context 'with an integer' do
       let(:value) { 16 }
+
       subject { Bis.new(size, value: value) }
 
       it 'compares to the bitset' do
@@ -52,6 +54,7 @@ describe Bis do
   describe '#[]' do
     context 'invalid index' do
       let (:size) { 10 }
+
       subject { Bis.new(size) }
 
       it 'fails' do
@@ -61,6 +64,7 @@ describe Bis do
 
     context 'small numbers' do
       let(:value) { 10 }
+
       subject { Bis.new(size, value: value) }
 
       it 'returns the bit at the given position' do
@@ -70,6 +74,7 @@ describe Bis do
 
     context 'large numbers' do
       let(:size) { 65 }
+
       subject { Bis.new(size).set(64) }
 
       it 'returns the bit at the given position' do
@@ -89,6 +94,7 @@ describe Bis do
 
     context 'valid argument' do
       let(:value) { 7 }
+
       subject { Bis.new(size, value: 7)[index] = argument }
 
       context '1' do
@@ -114,6 +120,7 @@ describe Bis do
   describe '#set' do
     let(:before) { 0b101 }
     let(:after) { 0b111 }
+
     subject { Bis.new(size, value: before) }
 
     it 'returns a new bitset with the given bit on' do
@@ -124,6 +131,7 @@ describe Bis do
   describe '#clear' do
     let(:before) { 0b111 }
     let(:after) { 0b101 }
+
     subject { Bis.new(size, value: before) }
 
     it 'returns a new bitset with the given bit off' do
@@ -133,6 +141,7 @@ describe Bis do
 
   describe '#to_a' do
     let(:size) { 8 }
+
     subject { Bis.new(size, value: 0b01010110).to_a }
 
     it 'returns a binary array representation of itself' do
@@ -142,6 +151,7 @@ describe Bis do
 
   describe '#to_i' do
     let(:size) { 4 }
+
     subject { Bis.new(size, value: 0b100) }
 
     it "returns it's integer representation" do
@@ -151,6 +161,7 @@ describe Bis do
 
   describe '#to_s' do
     let(:size) { 8 }
+
     subject { Bis.new(size, value: 0b01010110).to_s }
 
     it 'returns a binary array representation of itself' do
@@ -158,7 +169,36 @@ describe Bis do
     end
   end
 
-  describe '#+'
+  shared_examples 'pushing a bit' do
+    it 'increases the size' do
+      expect(subject.size).to eq size + 1
+    end
+
+    it 'pushes the new bit to the end of the new bitset' do
+      expect(subject).to eq new_value
+    end
+  end
+  
+  describe '#+' do
+    let(:size) { 8 }
+    let(:value) { 10 }
+
+    subject { Bis.new(size, value: value) + argument }
+
+    context '1' do
+      let(:argument) { 1 }
+      let(:new_value) { (value << 1) | argument }
+
+      it_behaves_like 'pushing a bit'
+    end
+
+    context '0' do
+      let(:argument) { 0 }
+      let(:new_value) { value << 1 }
+
+      it_behaves_like 'pushing a bit'
+    end
+  end
 
   describe '#&' do
     it 'evaluates to logic AND of the two bitsets' do
@@ -194,6 +234,7 @@ describe Bis do
 
     context 'non-zero value' do
       let(:value) { 10 }
+
       subject { Bis.new(size, value: value) }
 
       it 'shifts the internal value properly' do
@@ -215,6 +256,7 @@ describe Bis do
 
     context 'non-zero value' do
       let(:value) { 10 }
+
       subject { Bis.new(size, value: value) }
 
       it 'shifts the internal value properly' do
