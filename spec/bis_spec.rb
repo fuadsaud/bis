@@ -131,6 +131,15 @@ describe Bis do
     end
   end
 
+  describe '#to_a' do
+    let(:size) { 8 }
+    subject { Bis.new(size, value: 0b01010110).to_a }
+
+    it 'returns a binary array representation of itself' do
+      expect(subject).to eq [0, 1, 0, 1, 0, 1, 1, 0]
+    end
+  end
+
   describe '#to_i' do
     let(:size) { 4 }
     subject { Bis.new(size, value: 0b100) }
@@ -139,6 +148,17 @@ describe Bis do
       expect(subject).to eq 4
     end
   end
+
+  describe '#to_s' do
+    let(:size) { 8 }
+    subject { Bis.new(size, value: 0b01010110).to_s }
+
+    it 'returns a binary array representation of itself' do
+      expect(subject).to eq '01010110'
+    end
+  end
+
+  describe '#+'
 
   describe '#&' do
     it 'evaluates to logic AND of the two bitsets' do

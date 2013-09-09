@@ -99,9 +99,12 @@ class Bis
     each.reduce(0) { |a, e| (a << 1) | e }
   end
 
-  def inspect
+  def to_s
+    to_a.join
+  end
 
-    to_i.to_s
+  def inspect
+    "<<#{ to_s }>> #{ to_i }"
   end
 
   def ==(other)
