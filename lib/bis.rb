@@ -24,26 +24,11 @@ class Bis
   end
 
   def set(index)
-    return self if self[index] == 1
-x, y = offset_for(index)
-
-    new_with_same_size.().tap { |bis|
-      bis.store = @store.dup.tap { |s|
-        s[x] |= 1 << y
-      }
-    }
+    change_bit_at(index).(1)
   end
 
   def clear(index)
-    return self if self[index] == 0
-
-    x, y = offset_for(index)
-
-    new_with_same_size.().tap { |bis|
-      bis.store = @store.dup.tap { |s|
-        s[x] ^= 1 << y
-      }
-    }
+    change_bit_at(index).(0)
   end
 
   def [](index)
@@ -133,6 +118,12 @@ x, y = offset_for(index)
 
   private
 
+  def value=(value)
+    @store.each_with_index do |_, i|
+      @store[i] |= Integer(value >> (i * WORD_SIZE))
+    end
+  end
+
   def offset_for(index)
     if index >= size
       fail ArgumentError, "index #{index} out of boudaries for #{self}"
@@ -141,8 +132,34 @@ x, y = offset_for(index)
     [index / WORD_SIZE, index % WORD_SIZE]
   end
 
+
   def words_needed_for(bits)
     (bits - 1) / WORD_SIZE + 1
+  end
+
+  def with_valid_bit(bit)
+    case bit
+    when 0..1 then yield bit
+    else fail ArgumentError, 'bit must be either 0 or 1'
+    end
+  end
+
+  def change_bit_at(index)
+    ->(bit) {
+      return self if self[index] == bit
+
+      x, y = offset_for(index)
+
+      new_with_same_size.().tap { |bis|
+        bis.store = @store.dup.tap { |s|
+          s[x] = s[x].send(change_operation_for(bit), 1 << y)
+        }
+      }
+    }
+  end
+
+  def change_operation_for(bit)
+    bit.zero? ? :^ : :|
   end
 
   def new_with_same_size
@@ -155,19 +172,5 @@ x, y = offset_for(index)
         factory.new(size, value: value)
       }
     }
-  end
-
-  def value=(value)
-    @store.each_with_index do |_, i|
-      @store[i] |= Integer(value >> (i * WORD_SIZE))
-    end
-  end
-
-  def with_valid_bit(bit)
-    case bit
-    when 0..1 then yield bit
-    else
-      fail ArgumentError, 'bit must be either 0 or 1'
-    end
   end
 end
