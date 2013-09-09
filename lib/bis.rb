@@ -29,15 +29,15 @@ class Bis
     @store[x][y]
   end
 
-  def []=(index, value)
-    if value == 1
-      set(index)
-    elsif value == 0
-      clear(index)
-    else
-      fail ArgumentError, 'bit must be set to either 0 or 1'
-    end
-  end
+  # Not sure if it's a good idead to implement this.
+  # def []=(index, value)
+  #   case value
+  #   when 1 then set index
+  #   when 0 then clear index
+  #   else
+  #     fail ArgumentError, 'bit must be set to either 0 or 1'
+  #   end
+  # end
 
   def set(index)
     return self if self[index] == 1
@@ -121,6 +121,10 @@ class Bis
   private
 
   def offset_for(index)
+    if index >= size
+      fail ArgumentError, "index #{index} out of boudaries for #{self}"
+    end
+
     [index / WORD_SIZE, index % WORD_SIZE]
   end
 

@@ -50,8 +50,18 @@ describe Bis do
   end
 
   describe '#[]' do
+    context 'invalid index' do
+      let (:size) { 10 }
+      subject { Bis.new(size) }
+
+      it 'fails' do
+        expect { subject[11] }.to raise_error
+      end
+    end
+
     context 'small numbers' do
-      subject { Bis.new(size, value: 10) }
+      let(:value) { 10 }
+      subject { Bis.new(size, value: value) }
 
       it 'returns the bit at the given position' do
         expect(subject[3]).to eq 1
@@ -64,6 +74,39 @@ describe Bis do
 
       it 'returns the bit at the given position' do
         expect(subject[64]).to eq 1
+      end
+    end
+  end
+
+  describe '#[]=', pending: "Not sure if it's a good idea to implement this" do
+    context 'invalid argument' do
+      subject { Bis.new(size) }
+
+      it 'fails' do
+        expect { subject[4] = 'lol' }.to raise_error
+      end
+    end
+
+    context 'valid argument' do
+      let(:value) { 7 }
+      subject { Bis.new(size, value: 7)[index] = argument }
+
+      context '1' do
+        let(:index) { 4 }
+        let(:argument) { 1 }
+
+        it 'sets the given bit' do
+          expect(subject).to eq(value | (argument << index))
+        end
+      end
+
+      context '0' do
+        let(:index) { 1 }
+        let(:argument) { 0 }
+
+        it 'clears the given bit' do
+          expect(subject).to eq(value ^ (1 << index))
+        end
       end
     end
   end
