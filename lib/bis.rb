@@ -25,10 +25,9 @@ class Bis
 
   def set(index)
     return self if self[index] == 1
+x, y = offset_for(index)
 
-    x, y = offset_for(index)
-
-    self.class.new(size).tap { |bis|
+    new_with_same_size.().tap { |bis|
       bis.store = @store.dup.tap { |s|
         s[x] |= 1 << y
       }
@@ -40,7 +39,7 @@ class Bis
 
     x, y = offset_for(index)
 
-    self.class.new(size).tap { |bis|
+    new_with_same_size.().tap { |bis|
       bis.store = @store.dup.tap { |s|
         s[x] ^= 1 << y
       }
@@ -83,23 +82,23 @@ class Bis
   end
 
   def &(other)
-    new_with_same_size_factory.((other & to_i))
+    new_with_same_size.(value: other & to_i)
   end
 
   def |(other)
-    new_with_same_size_factory.((other | to_i))
+    new_with_same_size.(value: other | to_i)
   end
 
   def ^(other)
-    new_with_same_size_factory.((other ^ to_i))
+    new_with_same_size.(value: other ^ to_i)
   end
 
   def <<(amount)
-    new_with_same_size_factory.(to_i << amount)
+    new_with_same_size.(value: to_i << amount)
   end
 
   def >>(amount)
-    new_with_same_size_factory.(to_i >> amount)
+    new_with_same_size.(value: to_i >> amount)
   end
 
   def each
@@ -146,16 +145,16 @@ class Bis
     (bits - 1) / WORD_SIZE + 1
   end
 
-  def new
-    ->(size: size) {
-      ->(value: value) {
-        self.class.new(size, value: value)
-      }
-    }
+  def new_with_same_size
+    new.(size: size)
   end
 
-  def new_with_same_size_factory
-    ->(value) { self.class.new(size, value: value) }
+  def new(factory = self.class)
+    ->(size: size) {
+      ->(value: 0) {
+        factory.new(size, value: value)
+      }
+    }
   end
 
   def value=(value)
