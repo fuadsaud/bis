@@ -18,15 +18,9 @@ class Bis
     end
 
     @size = size
+    @store = Array.new(words_needed_for(size), 0)
 
-    store_size = words_needed_for(size)
-    @store = Array.new(store_size, 0)
-
-    if value
-      store_size.times do |i|
-        @store[i] |= Integer(value >> (i * WORD_SIZE))
-      end
-    end
+    self.value = value if value != 0
   end
 
   def [](index)
@@ -35,7 +29,19 @@ class Bis
     @store[x][y]
   end
 
+  def []=(index, value)
+    if value == 1
+      set(index)
+    elsif value == 0
+      clear(index)
+    else
+      fail ArgumentError, 'bit must be set to either 0 or 1'
+    end
+  end
+
   def set(index)
+    return self if self[index] == 1
+
     x, y = offset_for(index)
 
     self.class.new(size).tap { |bis|
@@ -46,15 +52,15 @@ class Bis
   end
 
   def clear(index)
-    unless self[index] == 0
-      x, y = offset_for(index)
+    return self if self[index] == 0
 
-      self.class.new(size).tap { |bis|
-        bis.store = @store.dup.tap { |s|
-          s[x] ^= 1 << y
-        }
+    x, y = offset_for(index)
+
+    self.class.new(size).tap { |bis|
+      bis.store = @store.dup.tap { |s|
+        s[x] ^= 1 << y
       }
-    end
+    }
   end
 
   def &(other)
@@ -124,5 +130,11 @@ class Bis
 
   def new_with_same_size_factory
     ->(value) { self.class.new(size, value: value) }
+  end
+
+  def value=(value)
+    @store.each_with_index do |_, i|
+      @store[i] |= Integer(value >> (i * WORD_SIZE))
+    end
   end
 end
