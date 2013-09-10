@@ -1,5 +1,3 @@
-require 'forwardable'
-
 require 'bis/conversion'
 require 'bis/version'
 
