@@ -24,4 +24,5 @@ DESC
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rubocop'
 end
