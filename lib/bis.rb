@@ -111,10 +111,7 @@ class Bis
   end
 
   protected
-
-  def store=(store)
-    @store = store
-  end
+  attr_writer :store
 
   private
 
