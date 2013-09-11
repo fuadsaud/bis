@@ -8,7 +8,16 @@ A pure ruby bitset implementation.
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+bis = Bis.new(8) #=> <<00000000>> 0
+
+bis.set(3) #=> <<00001000>> 8
+bis.set(3).set(2) #=> <<00001010>> 10
+bis2 = bis.set(3).set(2).clear(3) #=> <<00000010>> 2
+
+bis3 = bis2 << 4 #=> <<00100000>> 32
+bis3 + 1 #=> <<0010000001>> 65
+```
 
 ## Contributing
 
