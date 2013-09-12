@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://github.com/fuadsaud/bis'
   s.email             = 'fuadksd@gmail.com'
   s.authors           = 'Fuad Saud'
+  s.license           = 'MIT'
   s.has_rdoc          = false
 
   s.files             = %w( README.md Rakefile LICENSE.md )
