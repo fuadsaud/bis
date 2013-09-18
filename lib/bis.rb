@@ -11,7 +11,7 @@ class Bis
   end
 
   def initialize(size, value: 0)
-    unless size.kind_of?(Integer) && size > 0
+    unless size >= 0
       fail ArgumentError, 'size must be a positive integer'
     end
 
