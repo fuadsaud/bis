@@ -9,12 +9,10 @@ class Bis
   end
 
   def initialize(size, value: 0)
-    unless size >= 0
-      fail ArgumentError, 'size must be a positive integer'
-    end
+    fail ArgumentError, 'size must be a positive integer' if size < 0
 
-    @size = size
-    @store = value
+    @size = size.to_i
+    @store = value & ((1 << size) - 1)
   end
 
   def set(index)
