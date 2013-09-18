@@ -6,7 +6,7 @@ class Bis
       elsif obj.kind_of? Enumerable
         Bis.from_enum(obj)
       elsif obj.respond_to? :to_i
-        Bis.new(Bis::WORD_SIZE, value: obj.to_i)
+        Bis.new(64, value: obj.to_i)
       else
         fail TypeError, "#{obj.class} can't be coerced to Bis"
       end

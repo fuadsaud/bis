@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Bis do
-  let(:size) { Bis::WORD_SIZE }
+  let(:size) { 64 }
 
   it('has a version') { expect(Bis::VERSION).to be_a String }
 
@@ -178,7 +178,7 @@ describe Bis do
       expect(subject).to eq new_value
     end
   end
-  
+
   describe '#+' do
     let(:size) { 8 }
     let(:value) { 10 }
