@@ -1,5 +1,12 @@
 # Bis
 
+[![Gem Version](https://badge.fury.io/rb/bis.png)](http://badge.fury.io/rb/bis)
+[![Build Status](https://travis-ci.org/fuadsaud/bis.png?branch=master)]
+                (https://travis-ci.org/fuadsaud/bis)
+[![Code Climate](https://codeclimate.com/github/fuadsaud/bis.png)]
+                (https://codeclimate.com/github/fuadsaud/bis)
+
+
 A pure ruby bitset implementation.
 
 ## Installation
