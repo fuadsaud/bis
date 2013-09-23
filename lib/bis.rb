@@ -92,6 +92,18 @@ class Bis
     end
   end
 
+  def each_byte
+    return enum_for :each_byte unless block_given?
+
+    (size / 8).times.reverse_each do |offset|
+      yield Bis.new(8, value: (to_i >> offset * 8) & ((1 << 8) - 1))
+    end
+  end
+
+  def bytes
+    each_byte.to_a
+  end
+
   def to_a
     each.to_a
   end

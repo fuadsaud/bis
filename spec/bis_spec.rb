@@ -402,4 +402,28 @@ describe Bis do
       end
     end
   end
+
+  describe '#each_byte' do
+    subject { ->(b) { Bis.new(size, value: value).each_byte(&b) } }
+
+    context 'bitset has less than 8 bits' do
+      let(:size) { 4 }
+      let(:value) { 0 }
+
+      it "doesn't yield" do
+        expect { |b| subject.(b) }.to_not yield_control
+      end
+    end
+
+    context 'bitset has at least pne byte' do
+      let(:size) { 16 }
+      let(:first_byte) { 38 }
+      let(:second_byte) { 213 }
+      let(:value) { (first_byte << 8) | second_byte }
+
+      it 'yields all the bytes' do
+        expect { |b| subject.(b) }.to yield_successive_args 38, 213
+      end
+    end
+  end
 end
