@@ -191,33 +191,42 @@ describe Bis do
   end
 
   shared_examples 'pushing a bit' do
-    it 'increases the size' do
-      expect(subject.size).to eq size + 1
-    end
-
-    it 'pushes the new bit to the end of the new bitset' do
-      expect(subject).to eq new_value
-    end
   end
 
-  describe '#+' do
-    let(:size) { 8 }
-    let(:value) { 10 }
+  describe '#concat' do
+    subject { Bis.new(size, value: value).concat(argument) }
 
-    subject { Bis.new(size, value: value) + argument }
+    context 'with an integer' do
+      let(:size) { 8 }
+      let(:value) { 10 }
+      let(:argument) { 3 }
+      let(:argument_size) { 2 }
+      let(:new_value) { (value << argument_size) | argument }
 
-    context '1' do
-      let(:argument) { 1 }
-      let(:new_value) { (value << 1) | argument }
+      it 'has the orginal size plus enough to fit the new integer value' do
+        expect(subject.size).to eq size + argument_size
+      end
 
-      it_behaves_like 'pushing a bit'
+      it "concatenates the integer bits to the end it's end" do
+        expect(subject).to eq new_value
+      end
     end
 
-    context '0' do
-      let(:argument) { 0 }
-      let(:new_value) { value << 1 }
+    context 'with a bitset' do
+      let(:size) { 4 }
+      let(:value) { 3 }
+      let(:argument_size) { 10 }
+      let(:argument_value) { 10 }
+      let(:argument) { Bis.new(argument_size, value: argument_value) }
+      let(:new_value) { (value << argument_size) | argument_value }
 
-      it_behaves_like 'pushing a bit'
+      it 'returns a new bitset with the size of both bitsets combined' do
+        expect(subject.size).to eq size + argument_size
+      end
+
+      it 'concatenates the two bitsets' do
+        expect(subject.to_i).to eq new_value
+      end
     end
   end
 

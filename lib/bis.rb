@@ -4,6 +4,7 @@ require 'bis/version'
 class Bis
   attr_reader :size
   alias_method :length, :size
+  alias_method :bitlength, :size # Ruby 2.1 Integer interoperability
 
   def self.from_enum(enum)
     Bis.new(enum.size, value: enum.join.to_i(2))
@@ -48,9 +49,9 @@ class Bis
     to_i <=> Bis(other).to_i
   end
 
-  def +(value)
-    with_valid_bit value do |bit|
-      new.(size: size + 1).(value: to_i << 1 | bit)
+  def concat(other)
+    size_and_value_for(other) do |other_size, other_value|
+      new.(size: size + other_size).(value: (to_i << other_size) | other_value)
     end
   end
 
@@ -104,6 +105,10 @@ class Bis
 
   private
 
+  def size_and_value_for(bitset_or_integer)
+    yield bitlenght_for(bitset_or_integer), bitset_or_integer.to_i
+  end
+
   def with_valid_bit(bit)
     case bit
     when 0..1 then yield bit
@@ -128,5 +133,15 @@ class Bis
         factory.new(size, value: value)
       }
     }
+  end
+
+  def bitlenght_for(bitset_or_integer)
+    case bitset_or_integer
+    when Integer then  Math.log2(bitset_or_integer).ceil
+    when Bis     then  bitset_or_integer.size
+    else fail ArgumentError, 'cannot resolve a bitlength'
+                             "#{ bitset_or_integer }. Must be either Integer"
+                             'or Bis'
+    end
   end
 end
