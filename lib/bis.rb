@@ -3,6 +3,7 @@ require 'bis/version'
 
 class Bis
   attr_reader :size
+  alias_method :length, :size
 
   def self.from_enum(enum)
     Bis.new(enum.size, value: enum.join.to_i(2))
