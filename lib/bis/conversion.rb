@@ -1,5 +1,7 @@
 class Bis
   module Conversion
+    private
+
     def Bis(obj)
       if obj.kind_of? Bis
         obj
@@ -16,4 +18,8 @@ end
 
 module Kernel
   include Bis::Conversion
+end
+
+class Object
+  include Kernel
 end
