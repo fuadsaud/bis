@@ -2,13 +2,15 @@ require 'bis/conversion'
 require 'bis/version'
 
 class Bis
-  attr_reader :size
-  alias_method :length, :size
-  alias_method :bitlength, :size # Ruby 2.1 Integer interoperability
+  include Enumerable
 
   def self.from_enum(enum)
     Bis.new(enum.size, value: enum.join.to_i(2))
   end
+
+  attr_reader :size
+  alias_method :length, :size
+  alias_method :bitlength, :size # Ruby 2.1 Integer interoperability
 
   def initialize(size, value: 0)
     fail ArgumentError, 'size must be a positive integer' if size < 0
@@ -43,6 +45,10 @@ class Bis
 
   def ==(other)
     other == to_i
+  end
+
+  def ===(other)
+    to_i === other
   end
 
   def <=>(other)
