@@ -13,7 +13,7 @@ class Bis
   alias_method :bitlength, :size # Ruby 2.1 Integer interoperability
 
   def initialize(size, value: 0)
-    fail ArgumentError, 'size must be a positive integer' if size < 0
+    fail ArgumentError, 'size must be >= 0' if size < 0
 
     @size = size.to_i
     @store = value & ((1 << size) - 1)
@@ -146,6 +146,7 @@ class Bis
 
   def bitlenght_for(bitset_or_integer)
     case bitset_or_integer
+    when 0..1    then 1
     when Integer then  Math.log2(bitset_or_integer).ceil
     when Bis     then  bitset_or_integer.size
     else fail ArgumentError, 'cannot resolve a bitlength'

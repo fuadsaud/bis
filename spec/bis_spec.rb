@@ -196,19 +196,54 @@ describe Bis do
   describe '#concat' do
     subject { Bis.new(size, value: value).concat(argument) }
 
-    context 'with an integer' do
-      let(:size) { 8 }
-      let(:value) { 10 }
-      let(:argument) { 3 }
-      let(:argument_size) { 2 }
-      let(:new_value) { (value << argument_size) | argument }
+    context '0' do
+      context 'zero' do
+        let(:size) { 8 }
+        let(:value) { 10 }
+        let(:argument) { 0 }
+        let(:argument_size) { 1 }
+        let(:new_value) { (value << argument_size) | argument }
 
-      it 'has the orginal size plus enough to fit the new integer value' do
-        expect(subject.size).to eq size + argument_size
+        it 'has the orginal size plus enough to fit the new integer value' do
+          expect(subject.size).to eq size + argument_size
+        end
+
+        it "concatenates the integer bits to the end it's end" do
+          expect(subject).to eq new_value
+        end
       end
 
-      it "concatenates the integer bits to the end it's end" do
-        expect(subject).to eq new_value
+      context '1' do
+        let(:size) { 8 }
+        let(:value) { 10 }
+        let(:argument) { 1 }
+        let(:argument_size) { 1 }
+        let(:new_value) { (value << argument_size) | argument }
+
+        it 'has the orginal size plus enough to fit the new integer value' do
+          expect(subject.size).to eq size + argument_size
+        end
+
+        it "concatenates the integer bits to the end it's end" do
+          expect(subject).to eq new_value
+        end
+      end
+
+
+      context '> 1' do
+        let(:size) { 8 }
+        let(:value) { 10 }
+        let(:argument) { 3 }
+        let(:argument_size) { 2 }
+        let(:new_value) { (value << argument_size) | argument }
+
+        it 'has the orginal size plus enough to fit the new integer value' do
+          expect(subject.size).to eq size + argument_size
+        end
+
+        it "concatenates the integer bits to the end it's end" do
+          expect(subject).to eq new_value
+        end
       end
     end
 
