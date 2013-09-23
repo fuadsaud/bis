@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Bis do
-  let(:size) { 64 }
-
   it('has a version') { expect(Bis::VERSION).to be_a String }
 
   describe '.new' do
@@ -24,6 +22,7 @@ describe Bis do
       subject { Bis.new(size, value: value) }
 
       context 'with a bitset big enough to fit given size' do
+        let(:size) { 64 }
         let(:value) { 10 }
 
         it 'is as big as the passed size' do
@@ -53,6 +52,7 @@ describe Bis do
 
   describe '#==' do
     context 'with an integer' do
+      let(:size) { 64 }
       let(:value) { 16 }
 
       subject { Bis.new(size, value: value) }
@@ -79,6 +79,7 @@ describe Bis do
     end
 
     context 'small numbers' do
+      let(:size) { 64 }
       let(:value) { 10 }
 
       subject { Bis.new(size, value: value) }
@@ -101,6 +102,7 @@ describe Bis do
 
   describe '#[]=', pending: "Not sure if it's a good idea to implement this" do
     context 'invalid argument' do
+      let(:size) { 64 }
       subject { Bis.new(size) }
 
       it 'fails' do
@@ -109,6 +111,7 @@ describe Bis do
     end
 
     context 'valid argument' do
+      let(:size) { 64 }
       let(:value) { 7 }
 
       subject { Bis.new(size, value: 7)[index] = argument }
@@ -134,6 +137,7 @@ describe Bis do
   end
 
   describe '#set' do
+    let(:size) { 64 }
     let(:before) { 0b101 }
     let(:after) { 0b111 }
 
@@ -145,6 +149,7 @@ describe Bis do
   end
 
   describe '#clear' do
+    let(:size) { 64 }
     let(:before) { 0b111 }
     let(:after) { 0b101 }
 
@@ -217,6 +222,8 @@ describe Bis do
   end
 
   describe '#&' do
+    let(:size) { 64 }
+
     it 'evaluates to logic AND of the two bitsets' do
       expect(Bis.new(size, value: 0b1100) &
              Bis.new(size, value: 0b0101)).to eq Bis.new(size, value: 0b0100)
@@ -224,6 +231,8 @@ describe Bis do
   end
 
   describe '#|' do
+    let(:size) { 64 }
+
     it 'evaluates to logic OR of the two bitsets' do
       expect(Bis.new(size, value: 0b1100) |
              Bis.new(size, value: 0b0110)).to eq Bis.new(size, value: 0b1110)
@@ -231,6 +240,8 @@ describe Bis do
   end
 
   describe '#^' do
+    let(:size) { 64 }
+
     it 'evaluates to logic XOR of the two bitsets' do
       expect(Bis.new(size, value: 0b1100) ^
              Bis.new(size, value: 0b0110)).to eq Bis.new(size, value: 0b1010)
@@ -238,6 +249,7 @@ describe Bis do
   end
 
   describe '#>>' do
+    let(:size) { 64 }
     let(:shift) { 1 }
 
     context 'zero value' do
@@ -260,6 +272,7 @@ describe Bis do
   end
 
   describe '#<<' do
+    let(:size) { 64 }
     let(:shift) { 1 }
 
     context 'zero value' do
