@@ -21,16 +21,32 @@ describe Bis do
     end
 
     context 'with size and value' do
-      let(:value) { 10 }
-
       subject { Bis.new(size, value: value) }
 
-      it 'is as big as the passed size' do
-        expect(subject.size).to eq size
+      context 'with a bitset big enough to fit given size' do
+        let(:value) { 10 }
+
+        it 'is as big as the passed size' do
+          expect(subject.size).to eq size
+        end
+
+        it 'has the bits set to the given value' do
+          expect(subject).to eq value
+        end
       end
 
-      it 'has the bits set to the given value' do
-        expect(subject).to eq value
+      context 'with value overflowing the size' do
+        let(:size) { 3 }
+        let(:value) { 10 }
+        subject { Bis.new(size, value: value) }
+
+        it 'is as big as the passed size' do
+          expect(subject.size).to eq size
+        end
+
+        it 'truncates the given value to fit in the given biy length' do
+          expect(subject.to_i).to eq 2
+        end
       end
     end
   end
