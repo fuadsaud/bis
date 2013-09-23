@@ -55,6 +55,9 @@ class Bis
     end
   end
 
+  def +
+  end
+
   def &(other)
     new_with_same_size.(value: other & to_i)
   end

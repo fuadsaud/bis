@@ -22,7 +22,7 @@ describe Bis do
       subject { Bis.new(size, value: value) }
 
       context 'with a bitset big enough to fit given size' do
-        let(:size) { 64 }
+        let(:size) { 16 }
         let(:value) { 10 }
 
         it 'is as big as the passed size' do
@@ -52,7 +52,7 @@ describe Bis do
 
   describe '#==' do
     context 'with an integer' do
-      let(:size) { 64 }
+      let(:size) { 16 }
       let(:value) { 16 }
 
       subject { Bis.new(size, value: value) }
@@ -79,7 +79,7 @@ describe Bis do
     end
 
     context 'small numbers' do
-      let(:size) { 64 }
+      let(:size) { 16 }
       let(:value) { 10 }
 
       subject { Bis.new(size, value: value) }
@@ -92,17 +92,17 @@ describe Bis do
     context 'large numbers' do
       let(:size) { 65 }
 
-      subject { Bis.new(size).set(64) }
+      subject { Bis.new(size).set(16) }
 
       it 'returns the bit at the given position' do
-        expect(subject[64]).to eq 1
+        expect(subject[16]).to eq 1
       end
     end
   end
 
   describe '#[]=', pending: "Not sure if it's a good idea to implement this" do
     context 'invalid argument' do
-      let(:size) { 64 }
+      let(:size) { 16 }
       subject { Bis.new(size) }
 
       it 'fails' do
@@ -111,7 +111,7 @@ describe Bis do
     end
 
     context 'valid argument' do
-      let(:size) { 64 }
+      let(:size) { 16 }
       let(:value) { 7 }
 
       subject { Bis.new(size, value: 7)[index] = argument }
@@ -137,7 +137,7 @@ describe Bis do
   end
 
   describe '#set' do
-    let(:size) { 64 }
+    let(:size) { 16 }
     let(:before) { 0b101 }
     let(:after) { 0b111 }
 
@@ -149,7 +149,7 @@ describe Bis do
   end
 
   describe '#clear' do
-    let(:size) { 64 }
+    let(:size) { 16 }
     let(:before) { 0b111 }
     let(:after) { 0b101 }
 
@@ -230,35 +230,100 @@ describe Bis do
     end
   end
 
-  describe '#&' do
-    let(:size) { 64 }
+  describe '#+' do
+    context 'with an integer' do
+    end
+  end
 
-    it 'evaluates to logic AND of the two bitsets' do
-      expect(Bis.new(size, value: 0b1100) &
-             Bis.new(size, value: 0b0101)).to eq Bis.new(size, value: 0b0100)
+  describe '#&' do
+    let(:size) { 16 }
+
+    subject { Bis.new(size, value: value) & argument }
+
+    context 'with an integer' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument) { 5 }
+      let(:result) { value & argument }
+
+      it 'evaluates to logic AND of the two bitsets' do
+        expect(subject).to eq result
+      end
+    end
+
+    context 'with another bitset' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument_value) { 5 }
+      let(:argument) { Bis.new(size, value: argument_value) }
+      let(:result) { value & argument_value }
+
+      it 'evaluates to logic AND of the two bitsets' do
+        expect(subject).to eq result
+      end
     end
   end
 
   describe '#|' do
-    let(:size) { 64 }
+    let(:size) { 16 }
 
-    it 'evaluates to logic OR of the two bitsets' do
-      expect(Bis.new(size, value: 0b1100) |
-             Bis.new(size, value: 0b0110)).to eq Bis.new(size, value: 0b1110)
+    subject { Bis.new(size, value: value) | argument }
+
+    context 'with an integer' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument) { 5 }
+      let(:result) { value | argument }
+
+      it 'evaluates to logic AND of the two bitsets' do
+        expect(subject).to eq result
+      end
+    end
+
+    context 'with another bitset' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument_value) { 5 }
+      let(:argument) { Bis.new(size, value: argument_value) }
+      let(:result) { value | argument_value }
+
+      it 'evaluates to logic OR of the two bitsets' do
+        expect(subject).to eq result
+      end
     end
   end
 
   describe '#^' do
-    let(:size) { 64 }
+    let(:size) { 16 }
 
-    it 'evaluates to logic XOR of the two bitsets' do
-      expect(Bis.new(size, value: 0b1100) ^
-             Bis.new(size, value: 0b0110)).to eq Bis.new(size, value: 0b1010)
+    subject { Bis.new(size, value: value) ^ argument }
+
+    context 'with an integer' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument) { 5 }
+      let(:result) { value ^ argument }
+
+      it 'evaluates to logic AND of the two bitsets' do
+        expect(subject).to eq result
+      end
+    end
+
+    context 'with another bitset' do
+      let(:size) { 16 }
+      let(:value) { 12 }
+      let(:argument_value) { 5 }
+      let(:argument) { Bis.new(size, value: argument_value) }
+      let(:result) { value ^ argument_value }
+
+      it 'evaluates to logic XOR of the two bitsets' do
+        expect(subject).to eq result
+      end
     end
   end
 
   describe '#>>' do
-    let(:size) { 64 }
+    let(:size) { 16 }
     let(:shift) { 1 }
 
     context 'zero value' do
@@ -281,7 +346,7 @@ describe Bis do
   end
 
   describe '#<<' do
-    let(:size) { 64 }
+    let(:size) { 16 }
     let(:shift) { 1 }
 
     context 'zero value' do
