@@ -34,14 +34,14 @@ class Bis
   end
 
   # Not sure if it's a good idead to implement this.
-  def []=(index, value)
-    with_valid_bit value do |bit|
-      case bit
-      when 1 then set index
-      when 0 then clear index
-      end
-    end
-  end
+  # def []=(index, value)
+  #   with_valid_bit value do |bit|
+  #     case bit
+  #     when 1 then set index
+  #     when 0 then clear index
+  #     end
+  #   end
+  # end
 
   def concat(other)
     size_and_value_for(other) do |other_size, other_value|
