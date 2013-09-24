@@ -43,25 +43,16 @@ class Bis
     end
   end
 
-  def ==(other)
-    other == to_i
-  end
-
-  def ===(other)
-    to_i === other
-  end
-
-  def <=>(other)
-    to_i <=> Bis(other).to_i
-  end
-
   def concat(other)
     size_and_value_for(other) do |other_size, other_value|
       new.(size: size + other_size).(value: (to_i << other_size) | other_value)
     end
   end
 
-  def +
+  def +(other)
+    size_and_value_for(other + to_i) do |result_size, result|
+      new.(size: result_size).(value: result)
+    end
   end
 
   def &(other)
@@ -114,6 +105,29 @@ class Bis
 
   def to_s
     to_a.join
+  end
+
+  def ==(other)
+    other == to_i
+  end
+
+  def ===(other)
+    to_i === other
+  end
+
+  def <=>(other)
+    to_i <=> Bis(other).to_i
+  end
+
+  def coerce(other)
+    case other
+    when Integer
+      size_and_value_for(other) do |other_size, other_value|
+        [new.(size: other_size).(value: other_value), self]
+      end
+    else
+      fail TypeError, "#{ self.class } cannot be coerced into #{ other.class }"
+    end
   end
 
   def inspect
