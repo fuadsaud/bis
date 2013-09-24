@@ -176,8 +176,8 @@ class Bis
     when 2       then 2
     when Integer then  Math.log2(bitset_or_integer).ceil
     when Bis     then  bitset_or_integer.size
-    else fail ArgumentError, 'cannot resolve a bitlength'
-                             "#{ bitset_or_integer }. Must be either Integer"
+    else fail ArgumentError, 'cannot resolve a bitlength' + 
+                             "#{ bitset_or_integer }. Must be either Integer" +
                              'or Bis'
     end
   end
