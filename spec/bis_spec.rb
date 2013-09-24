@@ -229,6 +229,21 @@ describe Bis do
         end
       end
 
+      context '2' do
+        let(:size) { 8 }
+        let(:value) { 10 }
+        let(:argument) { 2 }
+        let(:argument_size) { 2 }
+        let(:new_value) { (value << argument_size) | argument }
+
+        it 'has the orginal size plus enough to fit the new integer value' do
+          expect(subject.size).to eq size + argument_size
+        end
+
+        it "concatenates the integer bits to the end it's end" do
+          expect(subject).to eq new_value
+        end
+      end
 
       context '> 1' do
         let(:size) { 8 }

@@ -159,6 +159,7 @@ class Bis
   def bitlenght_for(bitset_or_integer)
     case bitset_or_integer
     when 0..1    then 1
+    when 2       then 2
     when Integer then  Math.log2(bitset_or_integer).ceil
     when Bis     then  bitset_or_integer.size
     else fail ArgumentError, 'cannot resolve a bitlength'
