@@ -7,7 +7,7 @@
                 (https://codeclimate.com/github/fuadsaud/bis)
 
 
-A pure ruby bitset implementation.
+A pure ruby immutable bitset implementation.
 
 ## Installation
 
@@ -16,14 +16,13 @@ A pure ruby bitset implementation.
 ## Usage
 
 ```ruby
-bis = Bis.new(8) #=> <<00000000>> 0
-
-bis.set(3) #=> <<00001000>> 8
-bis.set(3).set(2) #=> <<00001010>> 10
-bis2 = bis.set(3).set(2).clear(3) #=> <<00000010>> 2
-
-bis3 = bis2 << 4 #=> <<00100000>> 32
-bis3 + 1 #=> <<0010000001>> 65
+bis = Bis.new(8)  #=> <<00000000>> 0
+bis.set(3)        #=> <<00001000>> 8
+bis.set(3).set(2) #=> <<00001100>> 12
+bis2 = bis.set(3).set(2).clear(3) #=> <<00000100>> 4
+bis3 = bis2 << 4  #=> <<01000000>> 64
+bis3 + 1          #=> <<1000001>> 65
+bis3.concat(10)   #=> <<010000001010>> 1034
 ```
 
 ## Contributing
