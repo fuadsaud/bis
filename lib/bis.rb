@@ -2,6 +2,7 @@ require 'bis/conversion'
 require 'bis/version'
 
 class Bis
+  include Comparable
   include Enumerable
 
   def self.from_enum(enum)
@@ -105,14 +106,6 @@ class Bis
 
   def to_s
     to_a.join
-  end
-
-  def ==(other)
-    other == to_i
-  end
-
-  def ===(other)
-    to_i === other
   end
 
   def <=>(other)
