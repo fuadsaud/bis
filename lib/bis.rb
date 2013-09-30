@@ -19,7 +19,7 @@ class Bis
     fail ArgumentError, 'size must be >= 0' if size < 0
 
     @size = size.to_i
-    @store = value & ((1 << size) - 1)
+    @store = (value & ((1 << size) - 1)).to_i
   end
 
   def set(index)
