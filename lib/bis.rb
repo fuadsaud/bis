@@ -11,7 +11,9 @@ class Bis
 
   attr_reader :size
   alias_method :length, :size
-  alias_method :bitlength, :size # Ruby 2.1 Integer interoperability
+
+  # Future versions of Ruby may have Fixnum#bitlength
+  alias_method :bitlength, :size
 
   def initialize(size, value: 0)
     fail ArgumentError, 'size must be >= 0' if size < 0
