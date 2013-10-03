@@ -423,21 +423,23 @@ describe Bis do
 
     context 'bitset has less than 8 bits' do
       let(:size) { 4 }
-      let(:value) { 0 }
+      let(:value) { 10 }
 
-      it "doesn't yield" do
-        expect { |b| subject.(b) }.to_not yield_control
+      it "yields many 1's as needed to fill a byte" do
+        expect { |b| subject.(b) }.to yield_with_args(0b10101111)
       end
     end
 
-    context 'bitset has at least pne byte' do
+    context 'bitset has at least one byte' do
       let(:size) { 16 }
-      let(:first_byte) { 38 }
-      let(:second_byte) { 213 }
+      let(:first_byte) { 0b00100110 }
+      let(:second_byte) { 0b11010101 }
       let(:value) { (first_byte << 8) | second_byte }
 
       it 'yields all the bytes' do
-        expect { |b| subject.(b) }.to yield_successive_args 38, 213
+        p Bis.new(size, value: value).each_byte.to_a
+        expect { |b| subject.(b) }.to yield_successive_args first_byte,
+                                                            second_byte
       end
     end
   end

@@ -6,7 +6,11 @@ class Bis
   include Enumerable
 
   def self.from_enum(enum)
-    Bis.new(enum.size, value: enum.join.to_i(2))
+    from_string(enum.join)
+  end
+
+  def self.from_string(string)
+    Bis.new(string.size, value: string.to_i(2))
   end
 
   attr_reader :size
@@ -89,10 +93,15 @@ class Bis
   def each_byte
     return enum_for :each_byte unless block_given?
 
-    aux = concat((1 << (8 - (size % 8))) - 1)
+    full_bitset = if size % 8 != 0
+                    concat((1 << (8 - (size % 8))) - 1)
+                  else
+                    self
+                  end
 
-    (aux.size / 8).times.reverse_each do |offset|
-      yield Bis.new(8, value: (aux >> offset * 8) & ((1 << 8) - 1))
+
+    (full_bitset.size / 8).times.reverse_each do |offset|
+      yield Bis.new(8, value: (full_bitset >> offset * 8) & ((1 << 8) - 1))
     end
   end
 
@@ -174,8 +183,8 @@ class Bis
     when 2       then 2
     when Integer then  Math.log2(bitset_or_integer).ceil
     else fail ArgumentError, 'cannot resolve a bitlength' +
-                             "#{ bitset_or_integer }. Must be either Integer" +
-                             'or Bis'
+      "#{ bitset_or_integer }. Must be either Integer" +
+      'or Bis'
     end
   end
 end
